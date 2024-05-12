@@ -114,3 +114,41 @@
 
 </section>
 <!-- featuse section end  -->
+
+<!-- FAQ section -->
+
+<section class="py-10 bg-gray-50 sm:py-16 lg:py-24">
+    <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl">
+                Explorez les questions fréquentes
+            </h2>
+        </div>
+        <div class="max-w-3xl mx-auto mt-8 space-y-4 md:mt-16">
+            <div *ngFor="let question of questions; let i = index"
+                class="transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50">
+                <button type="button" (click)="toggle(i)" [attr.aria-expanded]="question.isOpen ? 'true' : 'false'"
+                    class="flex items-center justify-between w-full px-4 py-5 sm:p-6">
+                    <span class="flex text-lg font-semibold text-black">{{ question.title }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="w-6 h-6 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div [style.display]="question.isOpen ? 'block' : 'none'" class="px-4 pb-5 sm:px-6 sm:pb-6 answer">
+                    <p>{{ question.answer }}</p>
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-gray-600 textbase mt-9">
+            Vous avez encore des questions ?
+            <span
+                class="cursor-pointer font-medium text-pink-400 transition-all duration-200 hover:text-pink-600 focus:text-tertiary hover-underline">Contactez
+                notre support
+            </span>
+        </p>
+    </div>
+</section>
+
+
+<!-- FAQ section end  -->
