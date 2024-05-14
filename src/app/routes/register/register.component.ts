@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
   FormGroup,
@@ -5,6 +6,10 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { register } from '../../store/auth/auth.actions';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { selectError } from '../../store/auth/auth.selector';
 
 @Component({
   selector: 'app-register',
@@ -23,11 +28,25 @@ export class RegisterComponent {
     ]),
   });
 
+  error$: Observable<string | null>;
+  private destroy$ = new Subject<void>();
+
+  constructor(private http: HttpClient, private store: Store) {
+    this.error$ = this.store.select(selectError);
+  }
+
+  errorMessage: string | null = null;
+
+  ngOnInit() {
+    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
+      this.errorMessage = error;
+    });
+  }
+
   onSubmit() {
-    console.log('Form validity:', this.form.valid);
-    console.log('Form errors:', this.form.errors);
+    this.form.markAllAsTouched();
     if (this.form.valid) {
-      console.log(this.form.value);
+      this.store.dispatch(register({ userData: this.form.value }));
     }
   }
 }
