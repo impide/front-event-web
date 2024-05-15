@@ -39,21 +39,13 @@ export class LoginComponent {
 
   errorMessage: string | null = null;
 
-  ngOnInit() {
-    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
-      console.log(error);
-
-      this.errorMessage = error;
-    });
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      console.log(user);
-    });
-  }
-
   onSubmit() {
     this.form.markAllAsTouched();
+
     if (this.form.valid) {
-      this.store.dispatch(login({ userData: this.form.value }));
+      const email = this.form.value.email as string;
+      const password = this.form.value.password as string;
+      this.store.dispatch(login({ userData: { email, password } }));
     }
   }
 }

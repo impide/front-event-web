@@ -8,7 +8,6 @@ import {
   login,
 } from './auth.actions';
 import { User } from './auth.interface';
-import { state } from '@angular/animations';
 
 export interface AuthState {
   user: User | null;
