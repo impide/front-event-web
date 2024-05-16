@@ -46,7 +46,12 @@ export class RegisterComponent {
   onSubmit() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      this.store.dispatch(register({ userData: this.form.value }));
+      const email = this.form.value.email as string;
+      const password = this.form.value.password as string;
+      const username = this.form.value.username as string;
+      this.store.dispatch(
+        register({ userData: { email, password, username } })
+      );
     }
   }
 }

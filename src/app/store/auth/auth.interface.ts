@@ -8,11 +8,16 @@ export interface User {
   zipcode?: string;
   birthday?: string;
   role?: string;
+  profileImage: string;
 }
 
 export interface UserLogin {
   email: string;
   password: string;
+}
+
+export interface UserRegister extends UserLogin {
+  username: string;
 }
 
 export interface LogginResponse {

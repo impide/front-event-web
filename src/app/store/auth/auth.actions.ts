@@ -1,9 +1,14 @@
 import { createAction, props } from '@ngrx/store';
-import { LogginResponse, User, UserLogin } from './auth.interface';
+import {
+  LogginResponse,
+  User,
+  UserLogin,
+  UserRegister,
+} from './auth.interface';
 
 export const register = createAction(
   '[Auth] Register',
-  props<{ userData: Object }>()
+  props<{ userData: UserRegister }>()
 );
 
 export const registerSuccess = createAction(
