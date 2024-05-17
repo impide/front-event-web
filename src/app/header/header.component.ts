@@ -30,8 +30,9 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      console.log('user', user);
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe((isAuth) => {
+      if (!isAuth) {
+      }
     });
   }
 }

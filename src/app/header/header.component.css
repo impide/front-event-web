@@ -45,3 +45,14 @@
 .dropdown:hover .dropdown-content {
   display: flex;
 }
+
+@media (max-width: 1024px) {
+  .dropdown-content {
+    right: 30%;
+  }
+}
+@media (max-width: 640px) {
+  .dropdown-content {
+    right: 3%;
+  }
+}

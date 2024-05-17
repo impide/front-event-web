@@ -1,4 +1,4 @@
-import { createReducer, on } from '@ngrx/store';
+import { Store, createReducer, on } from '@ngrx/store';
 import {
   registerSuccess,
   registerFailure,
@@ -8,6 +8,7 @@ import {
   login,
 } from './auth.actions';
 import { User } from './auth.interface';
+import { inject } from '@angular/core';
 
 export interface AuthState {
   user: User | null;
@@ -38,5 +39,5 @@ export const authReducer = createReducer(
     token: response.token,
   })),
   on(loginFailure, (state, { error }) => ({ ...state, user: null, error })),
-  on(logout, (state) => ({ ...state, user: null, error: null }))
+  on(logout, (state) => ({ ...state, user: null }))
 );

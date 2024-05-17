@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Signal, inject } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -7,9 +6,9 @@ import {
   FormControl,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { register } from '../../store/auth/auth.actions';
-import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectError } from '../../store/auth/auth.selector';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { injectAuthFeature } from '../../store/auth/auth.store';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +18,7 @@ import { selectError } from '../../store/auth/auth.selector';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  readonly authFeature = injectAuthFeature();
   protected readonly form = new FormGroup({
     username: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -28,30 +28,20 @@ export class RegisterComponent {
     ]),
   });
 
-  error$: Observable<string | null>;
-  private destroy$ = new Subject<void>();
+  error$: Signal<string | null | undefined>;
 
-  constructor(private http: HttpClient, private store: Store) {
-    this.error$ = this.store.select(selectError);
+  constructor(private store: Store) {
+    this.error$ = toSignal(this.store.select(selectError));
   }
-
-  errorMessage: string | null = null;
-
-  ngOnInit() {
-    this.error$.pipe(takeUntil(this.destroy$)).subscribe((error) => {
-      this.errorMessage = error;
-    });
-  }
-
   onSubmit() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
       const email = this.form.value.email as string;
       const password = this.form.value.password as string;
       const username = this.form.value.username as string;
-      this.store.dispatch(
-        register({ userData: { email, password, username } })
-      );
+      console.log(this.authFeature.register({ email, password, username }));
+
+      this.authFeature.register({ email, password, username });
     }
   }
 }

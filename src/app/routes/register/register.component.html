@@ -73,8 +73,8 @@
                         </div>
                         }
                         }
-                        @if(errorMessage) {
-                        <div class="text-red-500">{{ errorMessage }}</div>
+                        @if(error$()) {
+                        <div class="text-red-500">{{ error$() }}</div>
                         }
 
                         <button type="submit" class=" mt-5 tracking-wide font-semibold bg-pink-500 text-gray-100 w-full
