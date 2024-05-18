@@ -1,15 +1,20 @@
-<div class="h-screen bg-gray-200">
+<div class="h-screen bg-gradient-to-bl from-white to-pink-100">
 
     <!-- Sidebar / menu -->
     <div [ngClass]="{'-translate-x-full lg:translate-x-0': !showMenu, 'translate-x-0': showMenu}"
         class="h-screen absolute z-10 transition-all duration-300 ease-in-out  bg-white w-64 flex flex-col rounded-md">
         <div class="h-16 bg-[#E7FCF0] text-black flex items-center ps-4 rounded-md">
-            Event-Web
+            Mon compte
         </div>
-        <ul>
-            <li class="text-gray-600 hover:bg-gray-200 hover:text-gray-700 p-2">Informations</li>
-            <li class="text-gray-600 hover:bg-gray-200 hover:text-gray-700 p-2">Préférences</li>
-            <li class="text-gray-600 hover:bg-gray-200 hover:text-gray-700 p-2">Sécurité</li>
+        <ul class="mt-32 flex flex-col gap-8 w-full">
+            <li class="text-black hover:bg-pink-100  hover:text-gray-700 p-2 ps-4"><a class="flex font-bold"
+                    routerLink="/account-settings/informations"><mat-icon class="me-4">person</mat-icon>Informations</a>
+            </li>
+            <li class="text-black hover:bg-pink-100  hover:text-gray-700 p-2 ps-4"><a class="flex font-bold"
+                    routerLink="/account-settings/preferences"><mat-icon class="me-4">stars</mat-icon>Préférences</a>
+            </li>
+            <li class="text-black hover:bg-pink-100  hover:text-gray-700 p-2 ps-4"><a class="flex font-bold"
+                    routerLink="/account-settings/security"><mat-icon class="me-4">security</mat-icon>Sécurité</a></li>
 
         </ul>
     </div>
@@ -19,9 +24,10 @@
         <mat-icon>{{ showMenu ? 'close' : 'menu' }}</mat-icon>
     </button>
 
-    <div class="lg:left-64 relative flex-1 p-6 h-screen" (click)="closeSidebar()">
+    <div class="lg:left-64 relative flex-1 p-6 h-screen width-calc" (click)="closeSidebar()">
 
-        <h1 class="text-3xl font-bold mb-4">Titre</h1>
+        <router-outlet></router-outlet>
+
 
     </div>
 </div>

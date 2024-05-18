@@ -39,8 +39,6 @@ export class RegisterComponent {
       const email = this.form.value.email as string;
       const password = this.form.value.password as string;
       const username = this.form.value.username as string;
-      console.log(this.authFeature.register({ email, password, username }));
-
       this.authFeature.register({ email, password, username });
     }
   }

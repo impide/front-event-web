@@ -1,0 +1,5 @@
+@media (min-width: 1024px) {
+  .width-calc {
+    width: calc(100% - 256px);
+  }
+}

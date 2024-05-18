@@ -2,12 +2,13 @@ import { Component, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { selectIsAuth, selectUser } from '../store/auth/auth.selector';
+import { selectUser } from '../store/auth/auth.selector';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../store/auth/auth.interface';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
+import { injectAuthFeature } from '../store/auth/auth.store';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,8 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  readonly authFeature = injectAuthFeature();
+
   showMenu = false;
   toggleNavbar() {
     this.showMenu = !this.showMenu;
@@ -25,14 +28,7 @@ export class HeaderComponent {
   isAuth$: Signal<boolean | undefined>;
   user$: Observable<User | null>;
   constructor(private store: Store) {
-    this.isAuth$ = toSignal(this.store.select(selectIsAuth));
+    this.isAuth$ = this.authFeature.selectIsAuth;
     this.user$ = this.store.select(selectUser);
-  }
-
-  ngOnInit() {
-    this.user$.pipe(takeUntil(this.destroy$)).subscribe((isAuth) => {
-      if (!isAuth) {
-      }
-    });
   }
 }

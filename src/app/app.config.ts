@@ -13,6 +13,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { authReducer } from './store/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './store/auth/auth.effects';
+import { authFeature } from './store/auth/auth.store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,7 +37,7 @@ export const appConfig: ApplicationConfig = {
       } as SocialAuthServiceConfig,
     },
     provideStore(),
-    provideState({ name: 'auth', reducer: authReducer }),
+    provideState({ name: authFeature.name, reducer: authFeature.reducer }),
     provideEffects([AuthEffects]),
   ],
 };

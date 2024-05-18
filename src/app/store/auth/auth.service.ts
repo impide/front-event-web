@@ -15,14 +15,24 @@ export class AuthService {
   login(userData: UserLogin): Observable<LogginResponse> {
     return this.#http.post<LogginResponse>(
       'http://localhost:3000/auth/signin',
-      userData
+      userData,
+      { withCredentials: true }
     );
   }
 
   register(userData: UserRegister): Observable<string> {
     return this.#http.post<string>(
       'http://localhost:3000/auth/signup',
-      userData
+      userData,
+      { withCredentials: true }
+    );
+  }
+
+  autoLogin(token: string): Observable<LogginResponse> {
+    return this.#http.post<LogginResponse>(
+      'http://localhost:3000/auth/verify-token',
+      { token: token },
+      { withCredentials: true }
     );
   }
 }
