@@ -2,7 +2,6 @@ import { Component, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { selectUser } from '../store/auth/auth.selector';
 import { Store } from '@ngrx/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../store/auth/auth.interface';
@@ -26,9 +25,9 @@ export class HeaderComponent {
   }
   private destroy$ = new Subject<void>();
   isAuth$: Signal<boolean | undefined>;
-  user$: Observable<User | null>;
+  user$: Signal<User | null>;
   constructor(private store: Store) {
     this.isAuth$ = this.authFeature.selectIsAuth;
-    this.user$ = this.store.select(selectUser);
+    this.user$ = this.authFeature.selectUser;
   }
 }

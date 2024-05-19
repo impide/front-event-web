@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -7,10 +7,8 @@ import {
   FormControl,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { login } from '../../store/auth/auth.actions';
-import { Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../../store/auth/auth.interface';
-import { selectError, selectUser } from '../../store/auth/auth.selector';
+import { injectAuthFeature } from '../../store/auth/auth.store';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +18,7 @@ import { selectError, selectUser } from '../../store/auth/auth.selector';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  readonly authFeature = injectAuthFeature();
   protected readonly form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -28,13 +27,12 @@ export class LoginComponent {
     ]),
   });
 
-  error$: Observable<string | null>;
-  user$: Observable<User | null>;
-  private destroy$ = new Subject<void>();
+  error$: Signal<string | null>;
+  user$: Signal<User | null>;
 
   constructor(private http: HttpClient, private store: Store) {
-    this.error$ = this.store.select(selectError);
-    this.user$ = this.store.select(selectUser);
+    this.error$ = this.authFeature.selectError;
+    this.user$ = this.authFeature.selectUser;
   }
 
   errorMessage: string | null = null;
@@ -45,7 +43,7 @@ export class LoginComponent {
     if (this.form.valid) {
       const email = this.form.value.email as string;
       const password = this.form.value.password as string;
-      this.store.dispatch(login({ userData: { email, password } }));
+      this.authFeature.login({ email, password });
     }
   }
 }

@@ -1,18 +1,19 @@
-import { Injectable, inject } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { login, loginSuccess, loginFailure } from './auth.actions';
 import { authActions } from './auth.store';
 import { User, LogginResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { log } from 'console';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
 export class AuthEffects {
+  isBrowser: boolean;
   register$ = createEffect(() =>
     this.actions$.pipe(
       ofType(authActions.register),
@@ -38,20 +39,25 @@ export class AuthEffects {
 
   login$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(login),
+      ofType(authActions.login),
       debounceTime(500),
-      switchMap((action: ReturnType<typeof login>) =>
+      switchMap((action: ReturnType<typeof authActions.login>) =>
         this.authService.login(action.userData).pipe(
           map((response) => {
             this.snackBar.open('Connexion réussi', 'Close', {
               duration: 4000,
             });
+
             this.router.navigate(['/account-settings']);
-            localStorage.setItem('token', response.token);
-            return loginSuccess({ response: response as LogginResponse });
+            if (this.isBrowser) {
+              localStorage.setItem('token', response.token);
+            }
+            return authActions.loginSuccess({
+              response: response as LogginResponse,
+            });
           }),
           catchError((error) =>
-            of(loginFailure({ error: error.error.message }))
+            of(authActions.loginFailure({ error: error.error.message }))
           )
         )
       )
@@ -64,8 +70,6 @@ export class AuthEffects {
       switchMap((action: ReturnType<typeof authActions.autoLogin>) =>
         this.authService.autoLogin(action.token).pipe(
           map((response) => {
-            console.log('hello Nath');
-
             return authActions.loginSuccess({
               response: response as LogginResponse,
             });
@@ -83,6 +87,9 @@ export class AuthEffects {
     private http: HttpClient,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 }

@@ -68,8 +68,6 @@ export const authFeature = createFeature({
       authActions.register,
       authActions.autoLogin,
       (state) => {
-        console.log('Hello Tony');
-
         return {
           ...state,
           loading: true,
@@ -77,8 +75,6 @@ export const authFeature = createFeature({
       }
     ),
     on(authActions.loginSuccess, (state, { response }) => {
-      console.log('Hello Tony');
-
       return {
         ...state,
         user: response.user,
@@ -98,9 +94,13 @@ export function injectAuthFeature() {
   return {
     register: (userData: UserRegister) =>
       store.dispatch(authActions.register({ userData })),
+    login: (userData: UserLogin) =>
+      store.dispatch(authActions.login({ userData })),
     autoLogin: (token: string) =>
       store.dispatch(authActions.autoLogin({ token })),
 
     selectIsAuth: store.selectSignal(authFeature.selectIsAuth),
+    selectUser: store.selectSignal(authFeature.selectUser),
+    selectError: store.selectSignal(authFeature.selectError),
   };
 }

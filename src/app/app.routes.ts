@@ -3,6 +3,7 @@ import { HomeComponent } from './routes/home/home.component';
 import { RegisterComponent } from './routes/register/register.component';
 import { LoginComponent } from './routes/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { notAuthGuard } from './guards/notAuth.guard';
 import { AccountSettingComponent } from './routes/account-setting/account-setting.component';
 import { InformationsComponent } from './routes/account-setting/informations/informations.component';
 import { PreferencesComponent } from './routes/account-setting/preferences/preferences.component';
@@ -12,8 +13,12 @@ export const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [notAuthGuard],
+  },
+  { path: 'login', component: LoginComponent, canActivate: [notAuthGuard] },
   {
     path: 'account-settings',
     component: AccountSettingComponent,

@@ -5,9 +5,6 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { selectError } from '../../store/auth/auth.selector';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { injectAuthFeature } from '../../store/auth/auth.store';
 
 @Component({
@@ -30,8 +27,8 @@ export class RegisterComponent {
 
   error$: Signal<string | null | undefined>;
 
-  constructor(private store: Store) {
-    this.error$ = toSignal(this.store.select(selectError));
+  constructor() {
+    this.error$ = this.authFeature.selectError;
   }
   onSubmit() {
     this.form.markAllAsTouched();

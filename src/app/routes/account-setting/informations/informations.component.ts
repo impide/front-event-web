@@ -2,8 +2,8 @@ import { Component, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectError, selectUser } from '../../../store/auth/auth.selector';
 import { User } from '../../../store/auth/auth.interface';
+import { injectAuthFeature } from '../../../store/auth/auth.store';
 
 @Component({
   selector: 'app-informations',
@@ -13,8 +13,9 @@ import { User } from '../../../store/auth/auth.interface';
   styleUrl: './informations.component.css',
 })
 export class InformationsComponent {
+  readonly authFeature = injectAuthFeature();
   user$: Signal<User | null | undefined>;
   constructor(private store: Store) {
-    this.user$ = toSignal(this.store.select(selectUser));
+    this.user$ = this.authFeature.selectUser;
   }
 }

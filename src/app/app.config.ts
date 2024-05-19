@@ -10,7 +10,6 @@ import {
   GoogleLoginProvider,
 } from '@abacritt/angularx-social-login';
 import { provideState, provideStore } from '@ngrx/store';
-import { authReducer } from './store/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './store/auth/auth.effects';
 import { authFeature } from './store/auth/auth.store';
